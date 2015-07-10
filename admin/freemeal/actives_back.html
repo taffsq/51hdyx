@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="css/index.css"/>
+</head>
+<body>
+    <div class="tabs-left">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#1">妈咪宝贝</a></li>
+            <li><a data-toggle="tab" href="#2">索菲雅婚纱</a></li>
+            <li><a data-toggle="tab" href="#3">唐拉雅秀酒店</a></li>
+            <li class="active-add"><a data-toggle="tab" href="#4">添加活动</a></li>
+        </ul>
+        <div class="tab-content">
+            <form id="actForm" action="/actives" class="form-horizontal">
+                <div class="form-group">
+                    <label for="act-name" class="col-sm-3 control-label" data-toggle="tooltip" data-placement="left" title="Tooltip on left">活动名称</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="act-name" placeholder="活动名称" disabled value="123" >
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="pro-price" class="col-sm-3 control-label">产品价值</label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="pro-price" placeholder="产品价值">
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="min-price" class="col-sm-3 control-label">可以砍到的最低价格</label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="min-price" placeholder="0">
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="rad-max-price" class="col-sm-3 control-label">每次随机砍价最大值</label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="rad-max-price" placeholder="0">
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="rad-min-price" class="col-sm-3 control-label">每次随机砍价最小值</label>
+                    <div class="col-sm-2">
+                        <input type="number" class="form-control" id="rad-min-price" placeholder="0">
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="pro-img" class="col-sm-3 control-label">商品图片URL</label>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">http://</span>
+                            <input type="text" class="form-control" id="pro-img" placeholder="商品图片URL">
+                        </div>
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="start-time" class="col-sm-3 control-label">开始时间</label>
+                    <div class="col-sm-4">
+                        <input type="datetime-local" class="form-control" id="start-time" placeholder="开始时间">
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="end-time" class="col-sm-3 control-label">结束时间</label>
+                    <div class="col-sm-4">
+                        <input type="datetime-local" class="form-control" id="end-time" placeholder="结束时间">
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+                <div class="form-group">
+                    <label for="pro-news" class="col-sm-3 control-label">产品介绍图文URL</label>
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon">http://</span>
+                            <input type="text" class="form-control" id="pro-news" placeholder="产品介绍图文URL">
+                        </div>
+                    </div>
+                    <p class="text-danger control-label">请输入正确的语句！</p>
+                </div>
+
+                <p class="col-sm-8 stdformbutton">
+                    <button class="btn btn-primary">确 定</button>
+                    <button class="btn btn-primary">修 改</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
