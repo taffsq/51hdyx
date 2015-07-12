@@ -1,4 +1,3 @@
-
 //弹出面板
 function Alert_Panel(){
     var _aler;
@@ -74,6 +73,11 @@ function init() {
         });
     });
 
+    $(".act-edit-main .form-a").click( function(){
+        $(".act-edit-main form").submit();
+    } );
+
+
     //初始化预览框
     $('[data-toggle="popover-img"]').popover({
         content: function () {
@@ -108,9 +112,4 @@ function formChange( form ){
 
 $(function(){
     init();
-
-    $(".act-edit-main .form-a").click( function(){
-        $(".act-edit-main form").submit();
-        console.log("submit");
-    } );
 })

@@ -11,7 +11,7 @@
 <body>
 <div class="act-edit info-table">
     <div class="act-edit-main info-table-main">
-        <header class="info-header">分享编辑</header>
+        <header class="info-header">食物编辑</header>
         <?php 
             include '../php/class/admin/Dao.php';
             use php\admin;
@@ -39,7 +39,7 @@
                     $dao->insertFoodMats($_REQUEST);
                 }
                 
-                if( isset($_REQUEST['actid']) )
+                if( isset($actid) )
                     header("location:actEdit.php?actid=".$actid);
             }
             
@@ -83,7 +83,7 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">添加材料：</label>
                 <div class="col-sm-5">
-                    <a href="<?php echo 'materialEdit.php'.(isset($foodid)?'?foodid='.$foodid:'')?>" class="btn btn-primary">
+                    <a href="<?php echo 'materialEdit.php?foodid='.$foodid.'&actid='.$actid?>" class="btn btn-primary">
                            <span class="glyphicon glyphicon-plus"></span>添加新材料
                     </a>
                 </div>

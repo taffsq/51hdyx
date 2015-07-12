@@ -25,21 +25,6 @@
                             <li class="active"><a href="javascript:void(0)" data-type="actEdit.php?actid=10003">
                                 <span class="glyphicon glyphicon-th-large"></span>活动管理</a>
                             </li>
-                            <li><a href="javascript:void(0)">
-                                <span class="glyphicon glyphicon-th-large"></span>广告管理</a>
-                            </li>
-                            <li><a href="javascript:void(0)">
-                                <span class="glyphicon glyphicon-th-large"></span>商品管理</a>
-                            </li>
-                            <li><a href="javascript:void(0)">
-                                <span class="glyphicon glyphicon-th-large"></span>商家管理</a>
-                            </li>
-                            <li><a href="javascript:void(0)">
-                                <span class="glyphicon glyphicon-th-large"></span>规则管理</a>
-                            </li>
-                            <li><a href="javascript:void(0)">
-                                <span class="glyphicon glyphicon-th-large"></span>分享管理</a>
-                            </li>
 
                         </ul>
                     </li>

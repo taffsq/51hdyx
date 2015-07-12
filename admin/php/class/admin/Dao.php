@@ -25,9 +25,6 @@ class Dao
     //获取活动
     public function getAct( $actid ){
         $db = $this->getDb();
-        
-        echo 'getAct:';
-        print_r($actid);
         $sql = "select food_act.*,vendor.* from food_act,vendor where food_act.vendor_id=vendor.vendor_id && act_id=$actid";
         
         
@@ -43,7 +40,6 @@ class Dao
         $db->close();
         return $item;
     }
-    
     //更新活动
     public function updateAct( $params ){
         $db = $this->getDb();
@@ -62,6 +58,44 @@ class Dao
         
         
         $rows = $stmt->affected_rows;
+        
+        $stmt->close();
+        $db->close();
+        
+        return $rows;
+    }
+    public function checkAct( $actid ){
+        $db = $this->getDb();
+        $sql = "select count(*) from food_act where act_id=?";
+        $stmt = $db->prepare($sql);
+        
+        $stmt->bind_param("i", $actid );
+        $stmt->execute();
+        
+        $count = 0;
+        $stmt->bind_result($count);
+        
+        if( $stmt->fetch() ){
+             
+        }
+        
+        $stmt->close();
+        $db->close();
+        return $count;
+    }
+    public function insertAct(){
+        $db = $this->getDb();
+        $sql = "INSERT INTO food_act(act_name) VALUES (?)";
+        $stmt = $db->prepare($sql);
+        
+        $newname = "新的活动";
+        $stmt->bind_param("s",$newname);
+        $stmt->execute();
+        
+        if( $stmt->fetch() ){
+             
+        }
+        $rows = $stmt->insert_id;
         
         $stmt->close();
         $db->close();
@@ -87,7 +121,6 @@ class Dao
         $db->close();
         return $arr;
     }
-    
     public function insertVendor( $params ){
         $db = $this->getDb();
         $sql = "INSERT INTO vendor(`vendor_name`, `person_name`, `phone`, `vendor_imgurl`, `vendor_guanzhu`, `vendor_address`) VALUES (?,?,?,?,?,?)";
@@ -106,7 +139,6 @@ class Dao
         
         return $rows;
     }
-    
     public function checkVendor( $name ){
         $db = $this->getDb();
         $sql = "select count(*) from vendor where vendor_name=?";
@@ -162,6 +194,7 @@ class Dao
         $db->close();
         return $item;
     }
+    
     public function insertAdver( $params ){
         $db = $this->getDb();
         $sql = "INSERT INTO adver(img_url, url, act_id, adver_tit, st_date, end_date) VALUES (?,?,?,?,?,?)";
@@ -207,6 +240,24 @@ class Dao
         
         print_r($params);
         $stmt->bind_param("ssisssi", $params['img-url'],$params['link-url'],$params['actid'],$params['name'],$params['st-date'],$params['end-date'],$params['adverid'] );
+        $stmt->execute();
+        
+        if( $stmt->fetch() ){
+             
+        }
+        $rows = $stmt->affected_rows;
+        
+        $stmt->close();
+        $db->close();
+        
+        return $rows;
+    }
+    public function deleteAdver( $adverid ){
+        $db = $this->getDb();
+        $sql = "DELETE FROM adver WHERE(adver_id=?)";
+        $stmt = $db->prepare($sql);
+        
+        $stmt->bind_param("i",$adverid );
         $stmt->execute();
         
         if( $stmt->fetch() ){
@@ -544,6 +595,42 @@ class Dao
         
         return $id;
     }
+    public function deleteFood( $foodid ){
+        $db = $this->getDb();
+        $sql = "DELETE FROM food WHERE(food_id=?)";
+        $stmt = $db->prepare($sql);
+        
+        $stmt->bind_param("i",$foodid);
+        $stmt->execute();
+        
+        if( $stmt->fetch() ){
+             
+        }
+        $rows = $stmt->affected_rows;
+        
+        $stmt->close();
+        $db->close();
+        
+        return $rows;
+    }
+    public function deleteFoodMats( $foodid ){
+        $db = $this->getDb();
+        $sql = "DELETE FROM food_detail WHERE(food_id=?)";
+        $stmt = $db->prepare($sql);
+        
+        $stmt->bind_param("i",$foodid);
+        $stmt->execute();
+        
+        if( $stmt->fetch() ){
+             
+        }
+        $rows = $stmt->affected_rows;
+        
+        $stmt->close();
+        $db->close();
+        
+        return $rows;
+    }
     public function insertFoodMats( $params ){
         $db = $this->getDb();
         $sql = "INSERT INTO food_detail(food_id,material_id,material_kg) VALUES (?,?,?)";
@@ -650,6 +737,45 @@ class Dao
         $db->close();
         
         return $id;
+    }
+    public function deleteActFood( $actid,$foodid ){
+        $db = $this->getDb();
+        $sql = "DELETE FROM act_food WHERE(food_id=? and act_id=?)";
+        $stmt = $db->prepare($sql);
+        
+        $stmt->bind_param("ii",$foodid,$actid);
+        $stmt->execute();
+        
+        if( $stmt->fetch() ){
+             
+        }
+        $rows = $stmt->affected_rows;
+        
+        $stmt->close();
+        $db->close();
+        
+        return $rows;
+    }
+    public function updateActFood( $actid,$foodid,$params ){
+    	$db = $this->getDb();
+    	
+    	echo "updateActfood:";
+    	echo '____'.$foodid.'_____'.$actid.'____';
+    	print_r( $params );
+    	
+    	$sql = "UPDATE act_food SET kg=?,max_kg=?,min_kg=? WHERE act_id=? AND food_id=?";
+    	$stmt = $db->prepare($sql);
+    	
+    	$stmt->bind_param( "iiiii",$params['kg'],$params['maxkg'],$params['minkg'],$actid,$foodid );
+    	$stmt->execute();
+    	//$stmt->fetch();
+    	
+    	$rows = $stmt->affected_rows;
+    	
+    	$stmt->close();
+    	$db->close();
+    	
+    	return $rows;
     }
     
     public function insertMaterial( $params ){

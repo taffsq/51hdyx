@@ -14,24 +14,37 @@
     use php\admin;
     
     $dao = new admin\Dao();
+    $actid = isset( $_REQUEST["actid"] ) ? $_REQUEST["actid"] : NULL;
+    $foods = isset( $_POST['foods'] ) ? $_POST['foods'] : NULL;
     
     if( isset($_POST["act-name"]) )
         $dao->updateAct($_POST);
     
-    $act_id = isset( $_REQUEST["actid"] ) ? $_REQUEST["actid"] : null;
-    $add_vendor_url = changeLink( 'vendorEdit.php', $act_id );
-    $add_adver_url = changeLink( 'adverEdit.php', $act_id );
-    $add_share_url = changeLink( 'shareEdit.php', $act_id );
-    $edit_rule_url = changeLink( 'ruleEdit.php', $act_id );
-    $edit_food_url = changeLink( 'foodEdit.php', $act_id );
+    if( !isset($actid) || !$dao->checkAct($actid) )
+        $actid = $dao->insertAct();
     
-    $actItem = $dao->getAct( $act_id );
+    $add_vendor_url = changeLink( 'vendorEdit.php', $actid );
+    $add_adver_url = changeLink( 'adverEdit.php', $actid );
+    $add_share_url = changeLink( 'shareEdit.php', $actid );
+    $edit_rule_url = changeLink( 'ruleEdit.php', $actid );
+    $edit_food_url = changeLink( 'foodEdit.php', $actid );
+    
+    $actItem = $dao->getAct( $actid );
     
     echo "params:   ";
     print_r( $actItem );
+    echo "<br>";
     
-    function changeLink( $url,$act_id ){
-        return $url.(isset( $act_id )?"?actid=".$act_id:'');
+    if( isset($foods) ){
+    	echo 'foods:';
+    	foreach ( $foods as $fid=>$food){
+    		$food['kg'] *= 100;
+    		echo $dao->updateActFood($actid, $fid, $food);
+    	}
+    }
+    
+    function changeLink( $url,$actid ){
+        return $url.(isset( $actid )?"?actid=".$actid:'');
     }
 ?>
     <div class="act-edit info-table">
@@ -39,7 +52,7 @@
             <header class="info-header">活动编辑</header>
 
             <form action="actEdit.php" method="post"  class="form-horizontal" onsubmit="formChange(this)">
-                <input type="hidden" name="actid" value="<?php echo $act_id?>"/>
+                <input type="hidden" name="actid" value="<?php echo $actid?>"/>
                 <div class="form-group">
                     <label for="act-name" class="col-sm-2 control-label">活动名称：</label>
                     <div class="col-sm-3">
@@ -70,9 +83,9 @@
                 <div class="form-group">
                     <label for="act-vendor" class="col-sm-2 control-label">商家选择：</label>
                     <div class="col-sm-3">
-                        <div class="btn-group select-drop-down" id="act-vendor">
-                            <input type="hidden" name="vendor" value="<?php echo $actItem['vendor_id']?>"></input>
-                            <button type="button" class="btn btn-default dropdown-toggle form-item" data-form-name="vendor" data-toggle="dropdown"><?php echo $actItem['vendor_name']?> <span class="caret"></span></button>
+                        <input type="hidden" name="vendor" value="<?php echo $actItem['vendor_id']?>"></input>
+                        <div class="btn-group select-drop-down" id="act-vendor"> 
+                            <button type="button" class="btn btn-default dropdown-toggle form-item" data-form-name="vendor" data-toggle="dropdown"><?php echo $actItem['vendor_name']?$actItem['vendor_name']:"选择商家"?> <span class="caret"></span></button>
                             <ul class="dropdown-menu">
                                 <li><a href="<?php echo $add_vendor_url?>" class="form-a">添加商家</a></li>
                                 <li role="separator" class="divider"></li>
@@ -84,6 +97,10 @@
                                 ?>
                                 <li data-info="<?php echo $value['vendor_id']?>"><a href="javascript:void(0)"><?php echo $value['vendor_name']?></a></li>
                                 <?php }?>
+                                <?php /* <li data-container="body" data-toggle="popover-img" data-placement="right" title="青椒肉丝" data-img-url="http://i3.meishichina.com/attachment/recipe/201109/201109131526280.jpg">
+ <a href="javascript:void(0)"><span class="glyphicon glyphicon-search"></span> 青椒肉丝1</a>
+                                </li> */
+                                ?>
                             </ul>
                         </div>
                     </div>
@@ -111,19 +128,18 @@
 
                                     <tbody>
                                         <?php 
-                                            $advers = $dao->getAdvers($act_id);
+                                            $advers = $dao->getAdvers($actid);
                                             
                                             foreach ( $advers as $value ){
                                         ?>
                                         <tr>
                                             <td class="table-edit">
                                                 <a href="<?php echo $add_adver_url.'&adverid='.$value['adver_id']?>">
-                                                    <span class="glyphicon glyphicon-pencil"></span>
-                                                                                                                                                    编辑
+                                                    <span class="glyphicon glyphicon-pencil"></span>编辑
                                                 </a>
                                             </td>
                                             <td class="table-delete">
-                                                <a href="<?php echo 'adverRemove.php?adverid='.$value['adver_id']?>">
+                                                <a href="<?php echo 'adverRemove.php?adverid='.$value['adver_id'].'&actid='.$actid?>">
                                                     <span class="glyphicon glyphicon-remove"></span>
                                                                                                                                                      删除
                                                 </a>
@@ -164,14 +180,13 @@
                                     <tbody>
                                     <tr>
                                         <td class="table-edit">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                                <a href="<?php echo $add_share_url?>">
-                                                                                                                                                    编辑
-                                                </a>
+                                            <a href="<?php echo $add_share_url?>">
+                                                <span class="glyphicon glyphicon-pencil"></span>编辑
+                                            </a>
                                         </td>
                                         <td >
                                         <?php 
-                                            $share = isset($act_id)?$dao->getShare($act_id):NULL;
+                                            $share = isset($actid)?$dao->getShare($actid):NULL;
                                         ?>
                                             <a role="button" tabindex="0" href="javascript:void(0)" data-toggle="popover-img" data-placement="top"
                                                title="<?php echo isset($share)?$share['share_title']:"新分享标题"?>"
@@ -213,7 +228,7 @@
                                         </td>
                                         <td >
                                         <?php 
-                                            $rule = isset($act_id)?$dao->getRule($act_id) : NULL;
+                                            $rule = isset($actid)?$dao->getRule($actid) : NULL;
                                         ?>
                                             <a role="button" tabindex="0" href="javascript:void(0)" data-toggle="popover" data-placement="top"
                                                title="<?php echo isset($rule)?$rule['rule_title']:'新规则'?>"
@@ -245,9 +260,10 @@
                             <tr>
                                 <th> 
                                     <a href="<?php echo $edit_food_url?>">
-                                      <span class="glyphicon glyphicon-plus"></span>添加新菜
+                                      <span class="glyphicon glyphicon-plus"></span>添加菜品
                                     </a>
                                 </th>
+                                <th>删除</th>
                                 <th>名称</th>
                                 <th>随机聚集量（最大）</th>
                                 <th>随机聚集量（最小）</th>
@@ -257,13 +273,20 @@
 
                             <tbody>
                                 <?php 
-                                    $actFoods = $dao->getActFoods($act_id);
+                                    $actFoods = $dao->getActFoods($actid);
+                                    $cutFood = NULL;
                                     foreach ( $actFoods as $value ){
+                                    	$cutFood = 'foods['.$value['food_id'].']';
                                 ?>
                                 <tr>
                                     <td>
                                         <a href="<?php echo $edit_food_url."&foodid=".$value['food_id']?>">
                                             <span class="glyphicon glyphicon-pencil"></span>编辑
+                                        </a>
+                                    </td>
+                                    <td class="table-delete">
+                                        <a href="<?php echo 'actFoodRemove.php?foodid='.$value['food_id'].'&actid='.$actid?>">
+                                           <span class="glyphicon glyphicon-remove"></span>删除
                                         </a>
                                     </td>
                                     <td>
@@ -275,17 +298,17 @@
                                             </a>
                                     </td>
                                     <td>
-                                        <input type="text" placeholder="0" value="<?php 
+                                        <input type="text" placeholder="0" name="<?php echo $cutFood.'[maxkg]'?>" value="<?php 
                                             echo $value["max_kg"];
                                         ?>"/>克
                                     </td>
                                     <td>
-                                        <input type="text" placeholder="0" value="<?php 
+                                        <input type="text" placeholder="0" name="<?php echo $cutFood.'[minkg]'?>" value="<?php 
                                             echo $value["min_kg"];
                                         ?>"/>克
                                     </td>
                                     <td>
-                                        <input type="text" placeholder="0" value="<?php 
+                                        <input type="text" placeholder="0" name="<?php echo $cutFood.'[kg]'?>" value="<?php 
                                             echo $value["kg"]/100;
                                         ?>"/>百克
                                     </td>

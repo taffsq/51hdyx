@@ -18,12 +18,13 @@ $( function(){
         } );
 
         precen.blur( function(e){
-            console.log(this.value);
             if( this.value<1 ){
                 $(this).hide();
                 this.value = 0;
+                $(ele).removeClass("info");
                 $(this).parent().find("input[type='checkbox']").show();
             }else{
+                $(ele).addClass("info");
                 $(this).parent().find("input[type='checkbox']").hide();
             }
         }).blur();

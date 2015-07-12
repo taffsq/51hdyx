@@ -11,7 +11,7 @@
 <body>
 <div class="act-edit info-table">
     <div class="act-edit-main info-table-main">
-        <header class="info-header">分享编辑</header>
+        <header class="info-header">规则编辑</header>
         <?php 
             include '../php/class/admin/Dao.php';
             use php\admin;

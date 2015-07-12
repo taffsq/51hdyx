@@ -25,21 +25,13 @@
             
             //如果有id就更新，否则更新数据选项
             if( isset($_POST['title'],$actid) ){           
-                //检测是否存在
-                if( $dao->checkShare( $actid ) ){
-                   //存在就更新数据
+                //检测是否存在,存在就更新数据
+                if( $dao->checkShare( $actid ) )
                    $dao->updateShare($_REQUEST);
-                   header("location:actEdit.php?actid=".$actid);
-                   //echo '没有更改！';
                 //否则 就插入数据
-                }else if( $dao->insertShare($_REQUEST) ){
-                    echo "成功";
-                   if( isset( $actid ) ){
-                       header("location:actEdit.php?actid=".$actid);
-                   }else{
-                       header("location:actives.php");
-                   } 
-                }
+                else if( $dao->insertShare($_REQUEST) )
+                    echo "插入成功";
+                header("location:actEdit.php?actid=".$actid);
             }
             
             $share = NULL;

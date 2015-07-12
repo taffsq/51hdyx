@@ -11,11 +11,12 @@
 <body>
 <div class="act-edit info-table">
     <div class="act-edit-main info-table-main">
-        <header class="info-header">添加材料</header>
+        <header class="info-header">材料编辑</header>
         <?php 
             include '../php/class/admin/Dao.php';
             use php\admin;
 
+            $actid = isset($_REQUEST['actid']) ? $_REQUEST['actid'] : NULL;
             $dao = new admin\Dao();
             $foodid = isset($_REQUEST['foodid']) ? $_REQUEST['foodid'] : NULL;
             
@@ -29,12 +30,13 @@
                 
                 
                  if( isset($foodid) )
-                    header("location:foodEdit.php".(isset($_REQUEST["foodid"])?'?foodid='.$_REQUEST["foodid"]:"") ); 
+                     header( "location:foodEdit.php?actid=".$actid.'&foodid='.$foodid ); 
             }
             
         ?>
         
         <form action="materialEdit.php" method="post"  class="form-horizontal">
+            <input type="hidden" name="actid" value="<?php echo $actid?>"/>
             <input type="hidden" name="foodid" value="<?php echo $foodid?>"/>
             <div class="form-group">
                 <label for="name" class="col-sm-2 control-label">材料名称：</label>
